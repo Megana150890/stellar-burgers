@@ -6,14 +6,21 @@ import {
   NotFound404,
   Profile,
   ProfileOrders,
-  Register
+  Register,
+  ResetPassword
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { ProtectedRoute } from '../protected-route';
+import { ProtectedRoute } from '../protected-route/protectedRoute';
 
 // const App = () => (
 //   <div className={styles.app}>
@@ -24,13 +31,21 @@ import { ProtectedRoute } from '../protected-route';
 
 // export default App;
 
-const App = () => (
-  <Router>
+const App = () => {
+  const location = useLocation();
+  const backgroundLocation = location.state?.background;
+  const navigate = useNavigate();
+  const goToLogin = () => {
+    navigate('/login', { replace: false });
+  };
+
+  return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
           path='/login'
           element={
@@ -56,6 +71,14 @@ const App = () => (
           }
         />
         <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path='/profile'
           element={
             <ProtectedRoute>
@@ -71,37 +94,57 @@ const App = () => (
             </ProtectedRoute>
           }
         />
-        <Route path='*' element={<NotFound404 />} />
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-
         <Route
           path='/profile/orders/:number'
           element={
             <ProtectedRoute>
-              <Modal>
-                <OrderInfo />
-              </Modal>
+              <OrderInfo />
             </ProtectedRoute>
           }
         />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='*' element={<NotFound404 />} />
       </Routes>
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title={''} onClose={goToLogin}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal
+                title={''}
+                onClose={() => navigate('/feed', { replace: false })}
+              >
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <Modal
+                  title={''}
+                  onClose={() =>
+                    navigate('/profile/orders', { replace: false })
+                  }
+                >
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
     </div>
-  </Router>
-);
+  );
+};
 
 export default App;
