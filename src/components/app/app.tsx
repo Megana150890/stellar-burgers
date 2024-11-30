@@ -21,6 +21,9 @@ import {
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { ProtectedRoute } from '../protected-route/protectedRoute';
+import { useEffect } from 'react';
+import { getIngredientsList } from '../../slise/ingredientsSlice';
+import { useDispatch } from '../../services/store';
 
 // const App = () => (
 //   <div className={styles.app}>
@@ -34,10 +37,15 @@ import { ProtectedRoute } from '../protected-route/protectedRoute';
 const App = () => {
   const location = useLocation();
   const backgroundLocation = location.state?.background;
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const goToLogin = () => {
     navigate('/login', { replace: false });
   };
+
+  useEffect(() => {
+    dispatch(getIngredientsList());
+  }, []);
 
   return (
     <div className={styles.app}>
