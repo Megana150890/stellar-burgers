@@ -25,15 +25,6 @@ import { useEffect } from 'react';
 import { getIngredientsList } from '../../slise/ingredientsSlice';
 import { useDispatch } from '../../services/store';
 
-// const App = () => (
-//   <div className={styles.app}>
-//     <AppHeader />
-//     <ConstructorPage />
-//   </div>
-// );
-
-// export default App;
-
 const App = () => {
   const location = useLocation();
   const backgroundLocation = location.state?.background;

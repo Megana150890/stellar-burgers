@@ -1,22 +1,31 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
+import { useSelector } from 'react-redux';
+import { getBuns, getIngredients } from '../../slise/burgerConstructorSlise';
+import { useDispatch } from '../../services/store';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
+  // const constructorItems = {
+  //   bun: {
+  //     price: 0
+  //   },
+  //   ingredients: []
+  // };
+
+  const bun = useSelector(getBuns);
+  const ingredients = useSelector(getIngredients);
   const constructorItems = {
-    bun: {
-      price: 0
-    },
-    ingredients: []
+    bun: bun,
+    ingredients: ingredients
   };
+  const orderRequest = false; //стутас отправики заказа
 
-  const orderRequest = false;
-
-  const orderModalData = null;
+  const orderModalData = null; //данные для модального окна
 
   const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return;
+    if (!constructorItems.bun || orderRequest) return; // обработчкие клика на кнопку отправления заказа
   };
   const closeOrderModal = () => {};
 
@@ -30,7 +39,7 @@ export const BurgerConstructor: FC = () => {
     [constructorItems]
   );
 
-  return null;
+  // return null;
 
   return (
     <BurgerConstructorUI

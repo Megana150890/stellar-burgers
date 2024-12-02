@@ -6,10 +6,12 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 import { ingredientsReducer } from '../slise/ingredientsSlice';
+import { constructorReducer } from '../slise/burgerConstructorSlise';
 
 // const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
 const rootReducer = combineReducers({
-  ingredients: ingredientsReducer
+  ingredients: ingredientsReducer,
+  constructor: constructorReducer
 });
 
 const store = configureStore({

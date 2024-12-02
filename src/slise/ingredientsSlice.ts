@@ -25,7 +25,6 @@ export const ingredientsSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    // getIngredientsState: (state) => state,
     getIngredientsLoadingState: (state) => state.loading,
     getIngredients: (state) => state.ingredients
   },
