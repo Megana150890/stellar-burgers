@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 type TConstructorState = {
@@ -7,33 +7,45 @@ type TConstructorState = {
 };
 
 const initialState: TConstructorState = {
-  ingredients: [] as TConstructorIngredient[],
+  ingredients: [],
   bun: null
 };
 
 export const constructorSlice = createSlice({
-  name: 'constructor',
+  name: 'burgerConstructor',
   initialState,
   reducers: {
-    addBuns: (state, action: PayloadAction<TConstructorIngredient>) => {
-      state.bun = action.payload;
-    },
-    addIngredients: (state, action: PayloadAction<TConstructorIngredient>) => {
-      state.ingredients.push(action.payload);
+    addBunsandIngredients: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload; //если ингредиент -булка, то замеянем булку
+        } else {
+          state.ingredients.push(action.payload); //если не булка , то добавляем в массив ингредиентов
+        }
+      },
+      prepare: (ingredient: TIngredient) => {
+        const id = nanoid();
+        return { payload: { ...ingredient, id } };
+      }
     },
     deleteIngredients: (state, action: PayloadAction<string>) => {
       state.ingredients = state.ingredients.filter(
         (i) => i.id !== action.payload
       );
+    },
+    resetConstructor: (state) => {
+      state.ingredients = [];
+      state.bun = null;
     }
   },
+
   selectors: {
     getIngredients: (state) => state.ingredients,
-    getBuns: (state) => state.bun
+    getBun: (state) => state.bun
   }
 });
 
-export const { addBuns, addIngredients, deleteIngredients } =
+export const { addBunsandIngredients, deleteIngredients, resetConstructor } =
   constructorSlice.actions;
 export const constructorReducer = constructorSlice.reducer;
-export const { getIngredients, getBuns } = constructorSlice.selectors;
+export const { getIngredients, getBun } = constructorSlice.selectors;

@@ -109,7 +109,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title={''} onClose={goToLogin}>
+              <Modal title={'Детали ингредиента'} onClose={goToLogin}>
                 <IngredientDetails />
               </Modal>
             }

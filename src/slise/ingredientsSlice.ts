@@ -11,7 +11,7 @@ export const getIngredientsList = createAsyncThunk(
 type TIngredientState = {
   ingredients: Array<TIngredient>;
   loading: boolean;
-  error: string | null | undefined;
+  error: string | null;
 };
 
 const initialState: TIngredientState = {

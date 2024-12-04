@@ -2,8 +2,19 @@ import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useSelector } from 'react-redux';
-import { getBuns, getIngredients } from '../../slise/burgerConstructorSlise';
+import {
+  addBunsandIngredients,
+  getBun,
+  getIngredients,
+  resetConstructor
+} from '../../slise/burgerConstructorSlise';
 import { useDispatch } from '../../services/store';
+import {
+  getOrderModalData,
+  getOrderRequest,
+  newOrder
+} from '../../slise/orderSlice';
+import { clearOrder } from '../../slise/orderSlice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -13,21 +24,36 @@ export const BurgerConstructor: FC = () => {
   //   },
   //   ingredients: []
   // };
-
-  const bun = useSelector(getBuns);
+  const dispatch = useDispatch();
+  const bun = useSelector(getBun);
   const ingredients = useSelector(getIngredients);
+  console.log('Ingredients:', ingredients);
   const constructorItems = {
     bun: bun,
     ingredients: ingredients
   };
-  const orderRequest = false; //стутас отправики заказа
+  console.log('constructorItems:', constructorItems);
 
-  const orderModalData = null; //данные для модального окна
+  // const orderRequest = false; //стутас отправики заказа
+
+  // const orderModalData = null; //данные для модального окна
+
+  const orderRequest = useSelector(getOrderRequest); //стутас отправики заказа
+
+  const orderModalData = useSelector(getOrderModalData); //данные для модального окн
 
   const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return; // обработчкие клика на кнопку отправления заказа
+    if (!constructorItems.bun || orderRequest) return;
+
+    const data = [
+      constructorItems.bun._id,
+      ...constructorItems.ingredients.map((i) => i._id)
+    ];
+    dispatch(newOrder(data)); // обработчкие клика на кнопку отправления заказа
   };
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    dispatch(clearOrder()), dispatch(resetConstructor());
+  };
 
   const price = useMemo(
     () =>
@@ -52,3 +78,6 @@ export const BurgerConstructor: FC = () => {
     />
   );
 };
+// function clearOrder(): any {
+//   throw new Error('Function not implemented.');
+// }

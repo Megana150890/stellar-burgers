@@ -7,11 +7,13 @@ import {
 } from 'react-redux';
 import { ingredientsReducer } from '../slise/ingredientsSlice';
 import { constructorReducer } from '../slise/burgerConstructorSlise';
+import { orderReducer } from '../slise/orderSlice';
 
 // const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
-  constructor: constructorReducer
+  burgerConstructor: constructorReducer,
+  order: orderReducer
 });
 
 const store = configureStore({
