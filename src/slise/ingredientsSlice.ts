@@ -40,7 +40,7 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(getIngredientsList.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to get ingredirts';
+        state.error = action.error.message || 'Failed to get ingredients';
       });
   }
 });
