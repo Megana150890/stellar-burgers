@@ -32,13 +32,18 @@ export const FeedInfo: FC = () => {
   const readyOrders = getOrders(orders, 'done');
 
   const pendingOrders = getOrders(orders, 'pending');
-  // console.log('Props to FeedInfoUI:', {
-  //   readyOrders,
-  //   pendingOrders,
-  //   feed
-  // });
-  console.log('Pending orders:', pendingOrders);
-  console.log('Ready orders:', readyOrders);
+  console.log('Props to FeedInfoUI:', {
+    readyOrders,
+    pendingOrders,
+    feed
+  });
+  // console.log('Pending orders:', pendingOrders);
+  // console.log('Ready orders:', readyOrders);
+  console.log(
+    'Filtered pending orders:',
+    orders.filter((item) => item.status === 'pending')
+  );
+
   return (
     <FeedInfoUI
       readyOrders={readyOrders}
