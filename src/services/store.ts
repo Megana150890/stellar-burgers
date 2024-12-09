@@ -10,6 +10,7 @@ import { constructorReducer } from '../slise/burgerConstructorSlise';
 import { orderReducer } from '../slise/orderSlice';
 import { feedReducer } from '../slise/feedSlice';
 import { userResucer } from '../slise/userSlice';
+import { allOrderReducer } from '../slise/allOrdersSlice';
 
 // const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   burgerConstructor: constructorReducer,
   order: orderReducer,
   feed: feedReducer,
-  user: userResucer
+  user: userResucer,
+  orders: allOrderReducer
 });
 
 const store = configureStore({
