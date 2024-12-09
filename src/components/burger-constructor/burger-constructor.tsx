@@ -15,6 +15,8 @@ import {
   newOrder
 } from '../../slise/orderSlice';
 import { clearOrder } from '../../slise/orderSlice';
+import { isAuthenticatedSelect } from '../../slise/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -27,6 +29,8 @@ export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const bun = useSelector(getBun);
   const ingredients = useSelector(getIngredients);
+  const user = useSelector(isAuthenticatedSelect);
+  const navigate = useNavigate();
   console.log('Ingredients:', ingredients);
   const constructorItems = {
     bun: bun,
@@ -44,12 +48,15 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
-
-    const data = [
-      constructorItems.bun._id,
-      ...constructorItems.ingredients.map((i) => i._id)
-    ];
-    dispatch(newOrder(data)); // обработчкие клика на кнопку отправления заказа
+    if (!user) {
+      navigate('/login');
+    } else {
+      const data = [
+        constructorItems.bun._id,
+        ...constructorItems.ingredients.map((i) => i._id)
+      ];
+      dispatch(newOrder(data)); // обработчкие клика на кнопку отправления заказа
+    }
   };
   const closeOrderModal = () => {
     dispatch(clearOrder()), dispatch(resetConstructor());

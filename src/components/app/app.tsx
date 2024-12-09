@@ -24,18 +24,23 @@ import { ProtectedRoute } from '../protected-route/protectedRoute';
 import { useEffect } from 'react';
 import { getIngredientsList } from '../../slise/ingredientsSlice';
 import { useDispatch } from '../../services/store';
+import { getUser } from '../../slise/userSlice';
 
 const App = () => {
   const location = useLocation();
   const backgroundLocation = location.state?.background;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const goToLogin = () => {
-    navigate('/login', { replace: false });
+  // const goToLogin = () => {
+  //   navigate('/login', { replace: false });
+  // };
+
+  const handleCloseModal = () => {
+    navigate(-1);
   };
 
   useEffect(() => {
-    dispatch(getIngredientsList());
+    dispatch(getIngredientsList()), dispatch(getUser());
   }, []);
 
   return (
@@ -109,7 +114,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title={'Детали ингредиента'} onClose={goToLogin}>
+              <Modal title={'Детали ингредиента'} onClose={handleCloseModal}>
                 <IngredientDetails />
               </Modal>
             }

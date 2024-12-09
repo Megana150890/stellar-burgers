@@ -9,13 +9,15 @@ import { ingredientsReducer } from '../slise/ingredientsSlice';
 import { constructorReducer } from '../slise/burgerConstructorSlise';
 import { orderReducer } from '../slise/orderSlice';
 import { feedReducer } from '../slise/feedSlice';
+import { userResucer } from '../slise/userSlice';
 
 // const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burgerConstructor: constructorReducer,
   order: orderReducer,
-  feed: feedReducer
+  feed: feedReducer,
+  user: userResucer
 });
 
 const store = configureStore({

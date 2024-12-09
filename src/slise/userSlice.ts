@@ -1,6 +1,4 @@
-import { ingredientsReducer } from './ingredientsSlice';
 import {
-  fetchWithRefresh,
   forgotPasswordApi,
   getUserApi,
   loginUserApi,
@@ -11,13 +9,10 @@ import {
   TRegisterData,
   updateUserApi
 } from '@api';
-import { createAsyncThunk, createSlice, isAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { error } from 'console';
 import { deleteCookie, setCookie } from '../utils/cookie';
-import { arch } from 'os';
-import { access } from 'fs';
-
 type TUserData = {
   user: TUser | null;
   loading: boolean;
