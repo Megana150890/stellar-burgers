@@ -38,7 +38,8 @@ export const feedSlice = createSlice({
       })
       .addCase(getFeed.rejected, (state, action) => {
         (state.loading = false),
-          (state.error = action.error.message || 'Failed to get feed');
+          (state.error =
+            action.error.message || 'Ошибка в получении ленты заказов');
       })
       .addCase(getFeed.fulfilled, (state, action) => {
         (state.loading = false),
