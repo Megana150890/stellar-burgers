@@ -51,7 +51,8 @@ export const constructorSlice = createSlice({
 
   selectors: {
     getIngredients: (state) => state.ingredients,
-    getBun: (state) => state.bun
+    getBun: (state) => state.bun,
+    getBurgerSelect: (state) => state
   }
 });
 
@@ -62,4 +63,5 @@ export const {
   moveIngredient
 } = constructorSlice.actions;
 export const constructorReducer = constructorSlice.reducer;
-export const { getIngredients, getBun } = constructorSlice.selectors;
+export const { getIngredients, getBun, getBurgerSelect } =
+  constructorSlice.selectors;
