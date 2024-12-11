@@ -3,7 +3,11 @@ import React from 'react';
 
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from '../../services/store';
-import { getUserSelect, isAuthenticatedSelect } from '../../slise/userSlice';
+import {
+  getUserSelect,
+  isAuthCheckedSelector,
+  isAuthenticatedSelect
+} from '../../slise/userSlice';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -15,11 +19,11 @@ export const ProtectedRoute = ({
   onlyUnAuth
 }: ProtectedRouteProps) => {
   const location = useLocation();
-  const isAuthChecked = useSelector(isAuthenticatedSelect);
+  const isAuthChecked = useSelector(isAuthCheckedSelector);
   const user = useSelector(getUserSelect);
-  // if (!isAuthChecked) {
-  //   return <Preloader />;
-  // }
+  if (!isAuthChecked) {
+    return <Preloader />;
+  }
 
   if (!onlyUnAuth && !user) {
     return <Navigate to='/login' state={{ from: location }} />;

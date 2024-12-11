@@ -12,19 +12,21 @@ import {
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { error } from 'console';
-import { deleteCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
 type TUserData = {
   user: TUser | null;
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
+  isAuthChecked: boolean;
 };
 
 const initialState: TUserData = {
   loading: false,
   error: null,
   isAuthenticated: false,
-  user: null
+  user: null,
+  isAuthChecked: false
 };
 
 export const getUser = createAsyncThunk('user/getUser', getUserApi);
@@ -82,23 +84,20 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
-  selectors: {
-    getUserSelect: (state) => state.user,
-    getLoading: (state) => state.loading,
-    isAuthenticatedSelect: (state) => state.isAuthenticated
-  },
   extraReducers: (builder) => {
     builder
       .addCase(getUser.pending, (state) => {
-        (state.loading = true), (state.error = null);
+        (state.loading = true),
+          (state.error = null),
+          (state.isAuthenticated = false);
       })
       .addCase(getUser.fulfilled, (state, action) => {
         if (action.payload.user) {
           state.user = action.payload.user;
-          state.isAuthenticated = true;
+          (state.isAuthenticated = true), (state.isAuthChecked = true);
         } else {
           state.user = null;
-          state.isAuthenticated = false;
+          // state.isAuthenticated = false;
         }
         state.loading = false;
       })
@@ -108,7 +107,8 @@ export const userSlice = createSlice({
           (state.isAuthenticated = false),
           (state.error =
             action.error?.message ||
-            'Ошибка при получении данных пользователя');
+            'Ошибка при получении данных пользователя'),
+          (state.isAuthChecked = true);
       })
       .addCase(register.pending, (state) => {
         (state.loading = true), (state.error = null);
@@ -116,23 +116,30 @@ export const userSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         (state.loading = false),
           (state.isAuthenticated = true),
-          (state.user = action.payload.user);
+          (state.user = action.payload.user),
+          (state.isAuthChecked = true);
       })
       .addCase(register.rejected, (state, action) => {
         (state.loading = false),
-          (state.error = action.error?.message || 'Ошибка регистрации');
+          (state.error = action.error?.message || 'Ошибка регистрации'),
+          (state.isAuthChecked = true);
       })
       .addCase(login.pending, (state) => {
-        (state.loading = true), (state.error = null);
+        (state.loading = true), (state.isAuthenticated = false);
+        state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         (state.loading = false),
           (state.isAuthenticated = true),
-          (state.user = action.payload.user);
+          (state.user = action.payload.user),
+          (state.error = null),
+          (state.isAuthChecked = true);
       })
       .addCase(login.rejected, (state, action) => {
         (state.loading = false),
-          (state.error = action.error?.message || 'Ошибка входа');
+          (state.isAuthenticated = false),
+          (state.error = action.error?.message || 'Ошибка входа'),
+          (state.isAuthChecked = true);
       })
       .addCase(forgotPassword.pending, (state) => {
         (state.loading = true), (state.error = null);
@@ -161,10 +168,12 @@ export const userSlice = createSlice({
       .addCase(update.fulfilled, (state, action) => {
         (state.loading = false),
           (state.isAuthenticated = true),
+          (state.isAuthChecked = true),
           (state.user = action.payload.user);
       })
       .addCase(update.rejected, (state, action) => {
         (state.loading = false),
+          (state.isAuthChecked = true),
           (state.error =
             action.error?.message || 'Ошибка при обновлении данных');
       })
@@ -172,16 +181,28 @@ export const userSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         (state.loading = false),
           (state.user = null),
+          (state.isAuthChecked = true),
           (state.isAuthenticated = false);
       })
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
+        state.isAuthChecked = true;
         state.isAuthenticated = true;
         state.error = action.error.message || 'Ошибка выхода';
       });
+  },
+  selectors: {
+    getUserSelect: (state) => state.user,
+    getLoading: (state) => state.loading,
+    isAuthenticatedSelect: (state) => state.isAuthenticated,
+    isAuthCheckedSelector: (state) => state.isAuthChecked
   }
 });
 
 export const userResucer = userSlice.reducer;
-export const { getUserSelect, getLoading, isAuthenticatedSelect } =
-  userSlice.selectors;
+export const {
+  getUserSelect,
+  getLoading,
+  isAuthenticatedSelect,
+  isAuthCheckedSelector
+} = userSlice.selectors;
