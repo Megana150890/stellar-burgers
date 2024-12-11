@@ -51,28 +51,17 @@ export const login = createAsyncThunk(
 
 export const forgotPassword = createAsyncThunk(
   'user/forgot',
-  async (email: string, { rejectWithValue }) => {
-    try {
-      const data = await forgotPasswordApi({ email });
-      return data;
-    } catch (error) {
-      return rejectWithValue('Ошибка при запросе на восстановление пароля');
-    }
+  async (email: string) => {
+    const data = await forgotPasswordApi({ email });
+    return data;
   }
 );
 
 export const resetPassword = createAsyncThunk(
   'user/reset',
-  async (
-    { password, token }: { password: string; token: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      const data = await resetPasswordApi({ password, token });
-      return data;
-    } catch (error) {
-      return rejectWithValue('Ошибка при сбросе пароля');
-    }
+  async ({ password, token }: { password: string; token: string }) => {
+    const data = await resetPasswordApi({ password, token });
+    return data;
   }
 );
 export const update = createAsyncThunk(
@@ -104,14 +93,22 @@ export const userSlice = createSlice({
         (state.loading = true), (state.error = null);
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        (state.loading = false),
-          (state.isAuthenticated = true),
-          (state.user = action.payload.user);
+        if (action.payload.user) {
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+        } else {
+          state.user = null;
+          state.isAuthenticated = false;
+        }
+        state.loading = false;
       })
+
       .addCase(getUser.rejected, (state, action) => {
         (state.loading = false),
+          (state.isAuthenticated = false),
           (state.error =
-            action.error.message || 'Ошибка при получении данных пользователя');
+            action.error?.message ||
+            'Ошибка при получении данных пользователя');
       })
       .addCase(register.pending, (state) => {
         (state.loading = true), (state.error = null);
@@ -123,7 +120,7 @@ export const userSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         (state.loading = false),
-          (state.error = action.error.message || 'Ошибка регистрации');
+          (state.error = action.error?.message || 'Ошибка регистрации');
       })
       .addCase(login.pending, (state) => {
         (state.loading = true), (state.error = null);
@@ -135,7 +132,7 @@ export const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         (state.loading = false),
-          (state.error = action.error.message || 'Ошибка входа');
+          (state.error = action.error?.message || 'Ошибка входа');
       })
       .addCase(forgotPassword.pending, (state) => {
         (state.loading = true), (state.error = null);
@@ -146,7 +143,7 @@ export const userSlice = createSlice({
       .addCase(forgotPassword.rejected, (state, action) => {
         (state.loading = false),
           (state.error =
-            action.error.message || 'Ошибка при восстановлении пароля');
+            action.error?.message || 'Ошибка при восстановлении пароля');
       })
       .addCase(resetPassword.pending, (state) => {
         (state.loading = true), (state.error = null);
@@ -156,7 +153,7 @@ export const userSlice = createSlice({
       })
       .addCase(resetPassword.rejected, (state, action) => {
         (state.loading = false),
-          (state.error = action.error.message || 'Ошибка при сбросе пароля');
+          (state.error = action.error?.message || 'Ошибка при сбросе пароля');
       })
       .addCase(update.pending, (state) => {
         (state.loading = true), (state.error = null);
@@ -169,13 +166,18 @@ export const userSlice = createSlice({
       .addCase(update.rejected, (state, action) => {
         (state.loading = false),
           (state.error =
-            action.error.message || 'Ошибка при обновлении данных');
+            action.error?.message || 'Ошибка при обновлении данных');
       })
 
       .addCase(logout.fulfilled, (state) => {
         (state.loading = false),
           (state.user = null),
           (state.isAuthenticated = false);
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.error = action.error.message || 'Ошибка выхода';
       });
   }
 });

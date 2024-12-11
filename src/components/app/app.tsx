@@ -53,7 +53,7 @@ const App = () => {
         <Route
           path='/login'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -61,7 +61,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
@@ -69,7 +69,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -77,7 +77,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -122,10 +122,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal
-                title={''}
-                onClose={() => navigate('/feed', { replace: false })}
-              >
+              <Modal title={''} onClose={handleCloseModal}>
                 <OrderInfo />
               </Modal>
             }
@@ -134,12 +131,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal
-                  title={''}
-                  onClose={() =>
-                    navigate('/profile/orders', { replace: false })
-                  }
-                >
+                <Modal title={''} onClose={handleCloseModal}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>
