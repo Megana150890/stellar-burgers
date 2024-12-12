@@ -1,14 +1,14 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useSelector } from 'react-redux';
+
 import {
   addBunsandIngredients,
   getBun,
   getIngredients,
   resetConstructor
 } from '../../slise/burgerConstructorSlise';
-import { useDispatch } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import {
   getOrderModalData,
   getOrderRequest,
