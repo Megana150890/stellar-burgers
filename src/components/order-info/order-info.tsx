@@ -11,27 +11,17 @@ import { getIngredients } from '../../slise/ingredientsSlice';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  // const orderData = {
-  //   createdAt: '',
-  //   ingredients: [],
-  //   _id: '',
-  //   status: '',
-  //   name: '',
-  //   updatedAt: 'string',
-  //   number: 0
-  // };
   const orderData = useSelector(getOrderByNumberSelector);
 
   // const ingredients: TIngredient[] = [];
-  const ingredients: TIngredient[] = useSelector(getIngredients);
+  const ingredients = useSelector(getIngredients);
   const dispatch = useDispatch();
-  const number = useParams<{ number: string }>();
+  const { number } = useParams<{ number: string }>();
   useEffect(() => {
     if (number) {
       dispatch(getOrderByNumber(Number(number)));
     }
-  }, [dispatch, number]);
+  }, []);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

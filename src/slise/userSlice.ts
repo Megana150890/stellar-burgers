@@ -12,7 +12,7 @@ import {
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { error } from 'console';
-import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, setCookie } from '../utils/cookie';
 type TUserData = {
   user: TUser | null;
   loading: boolean;
