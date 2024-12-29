@@ -13,7 +13,7 @@ import { userResucer } from '../slise/userSlice';
 import { allOrderReducer } from '../slise/allOrdersSlice';
 
 // const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burgerConstructor: constructorReducer,
   order: orderReducer,
