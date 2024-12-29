@@ -8,19 +8,17 @@ import { TIngredient } from '../src/utils/types';
 import { rootReducer } from './../src/services/store';
 
 describe('rootReducer', () => {
-
-
-    it('должен корректно инициализировать неачальное состояние', () => {
-        const initialState = rootReducer(undefined,{ type: '@@INIT' } );
-        expect(initialState).toEqual({
-            ingredients: ingredientsReducer(undefined,{ type: '@@INIT' } ),
-            burgerConstructor: constructorReducer(undefined,{ type: '@@INIT' } ),
-              order: orderReducer(undefined,{ type: '@@INIT' } ),
-              feed: feedReducer(undefined,{ type: '@@INIT' } ),
-              user: userResucer(undefined,{ type: '@@INIT' } ),
-              orders: allOrderReducer(undefined,{ type: '@@INIT' } )
-        })
-    })
+  it('должен корректно инициализировать неачальное состояние', () => {
+    const initialState = rootReducer(undefined, { type: '@@INIT' });
+    expect(initialState).toEqual({
+      ingredients: ingredientsReducer(undefined, { type: '@@INIT' }),
+      burgerConstructor: constructorReducer(undefined, { type: '@@INIT' }),
+      order: orderReducer(undefined, { type: '@@INIT' }),
+      feed: feedReducer(undefined, { type: '@@INIT' }),
+      user: userResucer(undefined, { type: '@@INIT' }),
+      orders: allOrderReducer(undefined, { type: '@@INIT' })
+    });
+  });
   it('возвращает начальное состояние при неизвемтном действии', () => {
     const initialState = rootReducer(undefined, { type: 'UNKNOWN_ACTION' });
     expect(initialState).toEqual({
