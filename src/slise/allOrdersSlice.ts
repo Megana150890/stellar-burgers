@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getOrderByNumberApi, getOrdersApi } from '@api';
 import { getLoading } from './userSlice';
 
-type TAllOrders = {
+export type TAllOrders = {
   orders: TOrder[];
   orderByNumber: TOrder | null;
   error: string | null;

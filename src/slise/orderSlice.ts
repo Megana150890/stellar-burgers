@@ -4,7 +4,7 @@ import { orderBurgerApi } from '@api';
 
 export const newOrder = createAsyncThunk('order/newOrder', orderBurgerApi);
 
-type TOrderState = {
+export type TOrderState = {
   loading: boolean;
   order: TOrder | null;
   error: string | null;

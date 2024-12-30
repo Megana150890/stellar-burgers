@@ -13,7 +13,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { error } from 'console';
 import { deleteCookie, setCookie } from '../utils/cookie';
-type TUserData = {
+export type TUserData = {
   user: TUser | null;
   loading: boolean;
   error: string | null;
@@ -188,7 +188,7 @@ export const userSlice = createSlice({
         state.loading = false;
         state.isAuthChecked = true;
         state.isAuthenticated = true;
-        state.error = action.error.message || 'Ошибка выхода';
+        state.error = action.error?.message || 'Ошибка выхода';
       });
   },
   selectors: {
