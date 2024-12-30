@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getFeedsApi } from '@api';
 
-type feedState = {
+export type feedState = {
   loading: boolean;
   orders: TOrder[];
   error: string | null;
